@@ -9,7 +9,6 @@ public class PokedexServiceTest {
     @Test
     public void testGetPokemon() {
         var repository = new PokemonRepository(){
-
             @Override
             public Pokemon getPokemon(String name) {
                 return new Pokemon(name,

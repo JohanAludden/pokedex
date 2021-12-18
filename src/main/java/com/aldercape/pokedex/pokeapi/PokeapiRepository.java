@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +17,7 @@ public class PokeapiRepository {
 
     public Pokemon getPokemonByName(String name) {
         try {
-            String json = executeHttpGetRequest("https://pokeapi.co/api/v2/pokemon-species/" + name);
+            var json = executeHttpGetRequest("https://pokeapi.co/api/v2/pokemon-species/" + name);
             var parsedValue = mapper.readValue(json, new TypeReference<Map<String,Object>>(){});
             var legendary = getLegendary(parsedValue);
             var description = getDescription(parsedValue);
@@ -38,7 +41,13 @@ public class PokeapiRepository {
         return (Boolean) parsedValue.get("is_legendary");
     }
 
-    public String executeHttpGetRequest(String url) {
-        return "";
+    public InputStream executeHttpGetRequest(String url) {
+        try {
+            var con = (HttpURLConnection) (new URL(url).openConnection());
+            con.setRequestMethod("GET");
+            return con.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

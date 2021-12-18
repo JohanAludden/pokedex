@@ -2,6 +2,9 @@ package com.aldercape.pokedex.pokeapi;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,9 +16,9 @@ public class PokeapiRepositoryTest {
     public void testGetPokemonByName() {
         var repo = new PokeapiRepository(){
             @Override
-            public String executeHttpGetRequest(String url) {
+            public InputStream executeHttpGetRequest(String url) {
                 calledUrl = url;
-                return mewtwoJson;
+                return new ByteArrayInputStream(mewtwoJson.getBytes());
             }
         };
         var result = repo.getPokemonByName("mewtwo");
@@ -26,6 +29,19 @@ public class PokeapiRepositoryTest {
         assertTrue(result.legendary());
         assertEquals("rare", result.habitat());
     }
+
+    @Test
+    // This could be disabled if we want to manually test the connection to the remote api.
+    public void testGetPokemonByNameWithRemoteRequest() {
+        var repo = new PokeapiRepository();
+        var result = repo.getPokemonByName("mewtwo");
+
+        assertEquals("mewtwo", result.name());
+        assertEquals("It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.", result.description());
+        assertTrue(result.legendary());
+        assertEquals("rare", result.habitat());
+    }
+
 
     private String mewtwoJson = "{\n" +
             "   \"base_happiness\":0,\n" +
