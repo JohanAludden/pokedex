@@ -10,27 +10,35 @@ import java.util.Map;
 
 public class PokeapiRepository {
 
-    // legendary https://pokeapi.co/api/v2/pokemon-species/{id or name}/
-    // habitat https://pokeapi.co/api/v2/pokemon-species/{id or name}/
-    // flavor_text_entries description https://pokeapi.co/api/v2/pokemon-species/{id or name}/
+    private ObjectMapper mapper = new ObjectMapper();
 
     public Pokemon getPokemonByName(String name) {
         try {
-            String json = executeHttpGetRequest();
-            var mapper = new ObjectMapper();
+            String json = executeHttpGetRequest("https://pokeapi.co/api/v2/pokemon-species/" + name);
             var parsedValue = mapper.readValue(json, new TypeReference<Map<String,Object>>(){});
-            var legendary = (Boolean)parsedValue.get("is_legendary");
-            var description = (String)((Map<String, Object>) ((List) parsedValue.get("flavor_text_entries")).get(0)).get("flavor_text");
-            description = description.replace("\n", " ").replace("\f", " ");
-            var habitat = (String)((Map<String, Object>)parsedValue.get("habitat")).get("name");
-            System.out.println(habitat.getClass() + " " + habitat);
+            var legendary = getLegendary(parsedValue);
+            var description = getDescription(parsedValue);
+            var habitat = getHabitat(parsedValue);
             return new Pokemon(name, description, legendary, habitat);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String executeHttpGetRequest() {
+    private String getHabitat(Map<String, Object> parsedValue) {
+        return (String)((Map<String, Object>) parsedValue.get("habitat")).get("name");
+    }
+
+    private String getDescription(Map<String, Object> parsedValue) {
+        var result = (String)((Map<String, Object>) ((List) parsedValue.get("flavor_text_entries")).get(0)).get("flavor_text");
+        return result.replace("\n", " ").replace("\f", " ");
+    }
+
+    private Boolean getLegendary(Map<String, Object> parsedValue) {
+        return (Boolean) parsedValue.get("is_legendary");
+    }
+
+    public String executeHttpGetRequest(String url) {
         return "";
     }
 }

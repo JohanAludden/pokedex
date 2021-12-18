@@ -3,21 +3,27 @@ package com.aldercape.pokedex.pokeapi;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PokeapiRepositoryTest {
+
+    private String calledUrl;
 
     @Test
     public void testGetPokemonByName() {
         var repo = new PokeapiRepository(){
             @Override
-            public String executeHttpGetRequest() {
+            public String executeHttpGetRequest(String url) {
+                calledUrl = url;
                 return mewtwoJson;
             }
         };
         var result = repo.getPokemonByName("mewtwo");
+
+        assertEquals("https://pokeapi.co/api/v2/pokemon-species/mewtwo", calledUrl);
         assertEquals("mewtwo", result.name());
         assertEquals("It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.", result.description());
-        assertEquals(true, result.legendary());
+        assertTrue(result.legendary());
         assertEquals("rare", result.habitat());
     }
 
