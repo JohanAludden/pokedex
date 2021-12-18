@@ -10,7 +10,7 @@ public class PokedexServiceTest {
     public void testGetPokemon() {
         var repository = new PokemonRepository(){
             @Override
-            public Pokemon getPokemon(String name) {
+            public Pokemon getPokemonByName(String name) {
                 return new Pokemon(name,
                         "It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.",
                         false,

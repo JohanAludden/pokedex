@@ -1,5 +1,8 @@
 package com.aldercape.pokedex;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class PokedexService {
 
     private PokemonRepository repository;
@@ -9,6 +12,6 @@ public class PokedexService {
     }
 
     public Pokemon getPokemon(String name) {
-        return repository.getPokemon(name);
+        return repository.getPokemonByName(name);
     }
 }

@@ -1,8 +1,10 @@
 package com.aldercape.pokedex.pokeapi;
 
 import com.aldercape.pokedex.Pokemon;
+import com.aldercape.pokedex.PokemonRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +13,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-public class PokeapiRepository {
+@Repository
+public class PokeapiRepository implements PokemonRepository {
 
     private ObjectMapper mapper = new ObjectMapper();
 
