@@ -5,6 +5,7 @@ import com.aldercape.pokedex.PokemonRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,12 @@ import java.util.Map;
 
 @Repository
 public class PokeapiRepository implements PokemonRepository {
+
+    private final RestTemplate client;
+
+    public PokeapiRepository(RestTemplate client) {
+        this.client = client;
+    }
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -44,13 +51,7 @@ public class PokeapiRepository implements PokemonRepository {
         return (Boolean) parsedValue.get("is_legendary");
     }
 
-    public InputStream executeHttpGetRequest(String url) {
-        try {
-            var con = (HttpURLConnection) (new URL(url).openConnection());
-            con.setRequestMethod("GET");
-            return con.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public String executeHttpGetRequest(String url) {
+        return client.getForObject(url, String.class);
     }
 }

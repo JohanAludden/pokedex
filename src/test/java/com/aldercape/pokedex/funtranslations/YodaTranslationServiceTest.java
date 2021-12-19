@@ -26,7 +26,7 @@ public class YodaTranslationServiceTest {
 
     @Test
     @Disabled
-    // This could be disabled if we want to manually test the connection to the remote api.
+    // This could be enabled if we want to test the connection to the remote api.
     public void testTranslateWithRemoteRequest() {
         var service = new YodaTranslationService(new RestTemplate());
         var result = service.translate("This is a test");

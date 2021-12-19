@@ -1,29 +1,29 @@
 package com.aldercape.pokedex.pokeapi;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PokeapiRepositoryTest {
 
-    private String calledUrl;
-
     @Test
     public void testGetPokemonByName() {
-        var repo = new PokeapiRepository(){
-            @Override
-            public InputStream executeHttpGetRequest(String url) {
-                calledUrl = url;
-                return new ByteArrayInputStream(mewtwoJson.getBytes());
-            }
-        };
+        var client = mock(RestTemplate.class);
+        when(
+                client.getForObject(
+                        eq("https://pokeapi.co/api/v2/pokemon-species/mewtwo"),
+                        eq(String.class)))
+                .thenReturn(mewtwoJson);
+
+        var repo = new PokeapiRepository(client);
         var result = repo.getPokemonByName("mewtwo");
 
-        assertEquals("https://pokeapi.co/api/v2/pokemon-species/mewtwo", calledUrl);
         assertEquals("mewtwo", result.name());
         assertEquals("It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.", result.description());
         assertTrue(result.legendary());
@@ -31,9 +31,10 @@ public class PokeapiRepositoryTest {
     }
 
     @Test
-    // This could be disabled if we want to manually test the connection to the remote api.
+    @Disabled
+    // This could be enabled if we want to test the connection to the remote api.
     public void testGetPokemonByNameWithRemoteRequest() {
-        var repo = new PokeapiRepository();
+        var repo = new PokeapiRepository(new RestTemplate());
         var result = repo.getPokemonByName("mewtwo");
 
         assertEquals("mewtwo", result.name());
