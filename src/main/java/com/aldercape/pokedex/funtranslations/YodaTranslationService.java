@@ -3,13 +3,11 @@ package com.aldercape.pokedex.funtranslations;
 import com.aldercape.pokedex.TranslationService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 
 @Service

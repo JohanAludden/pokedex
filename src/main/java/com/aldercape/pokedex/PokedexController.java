@@ -20,6 +20,6 @@ public class PokedexController {
 
     @GetMapping("/pokemon/translated/{name}")
     public Pokemon getTranslatedPokemon(@PathVariable String name) {
-        return service.getPokemon(name);
+        return service.getTranslatedPokemon(name);
     }
 }
