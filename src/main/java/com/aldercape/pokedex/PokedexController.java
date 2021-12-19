@@ -17,4 +17,9 @@ public class PokedexController {
     public Pokemon getPokemon(@PathVariable String name) {
         return service.getPokemon(name);
     }
+
+    @GetMapping("/pokemon/translated/{name}")
+    public Pokemon getTranslatedPokemon(@PathVariable String name) {
+        return service.getPokemon(name);
+    }
 }
